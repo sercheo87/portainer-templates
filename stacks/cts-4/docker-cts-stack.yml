@@ -1,6 +1,20 @@
 version: '2'
 
 services:
+
+  dev-was9-cts4-ssn:
+    container_name: dev-was9-cts4-ssn
+    image: nexussrv.com:18444/cts/4.2.0/ssnsrv:1.0.0
+    # stdin_open: true
+    # tty: true
+    ports:
+      - "6005:6005"
+    hostname: ssnsrv
+    networks:
+     cts4-was9-ntw:
+        aliases:
+          - was9.cts4.ssnsrv.com
+
   dev-was9-cts4-sqlserver:
     container_name: dev-was9-cts4-sqlserver
     image: "nexussrv.com:18444/dev/was-9/cts-4/sqlserver:2017"
