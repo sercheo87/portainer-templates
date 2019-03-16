@@ -1,0 +1,114 @@
+version: '3.2'
+
+services:
+  dev-was9-cts4-sqlserver:
+    container_name: dev-was9-cts4-sqlserver
+    image: "nexussrv.com:18444/dev/was-9/cts-4/sqlserver:2017"
+    hostname: sqlserversrv
+    environment:
+      - "ACCEPT_EULA=Y"
+      - "SA_PASSWORD=mssqlServer1433"
+    ports:
+      - "21433:1433"
+    networks:
+      cts4-was9-ntw:
+        aliases:
+          - was9.cts4.sqlserversrv.com
+
+  dev-was9-cts4-sybase:
+    container_name: dev-was9-cts4-sybase
+    image: nexussrv.com:18444/sch-sybase:15.7
+    hostname: dksybase
+    ports:
+      - "5000:5000"
+    networks:
+      cts4-was9-ntw:
+        aliases:
+          - was9.cts4.sybasesrv.com
+
+  dev-was9-cts4-ibmmq:
+    container_name: dev-was9-cts4-ibmmq
+    image: nexussrv.com:18444/dev/was-9/cts-4/ibmmq:9
+    hostname: ibmmqsrvw8
+    ports:
+      - "1414:1414"
+      - "29443:9443"
+    environment:
+      LICENSE: accept
+      MQ_QMGR_NAME: QM.BROKER01
+    networks:
+      cts4-was9-ntw:
+        aliases:
+          - was9.cts4.ibmmqsrv.com
+
+  dev-was9-cts4-cts-base:
+    container_name: dev-was9-cts4-cts-base
+    image: nexussrv.com:18444/dev/was-9/cts-4/ien-4/cts-base:4
+    ports:
+      - "9060:9060"
+      - "9080:9080"
+      - "9043:9043"
+      - "9443:9443"
+      - "8880:8880"
+      - "9100:9100"
+    hostname: ctswas8
+    mac_address: 02-42-AC-13-00-08
+    environment:
+      LANG: C.UTF-8
+      IEN_HOME: /workspace-cobis/ien-home
+      COBIS_HOME: /workspace-cobis/cobishome
+    # volumes:
+    #   - './ibm-was/PASSWORD:/tmp/PASSWORD'
+    #   - './workspace-w9:/workspace-cobis'
+    #   - './was9-logs:/opt/IBM/WebSphere/AppServer/profiles/AppSrv01/logs/server1'
+    #   - './timezone:/etc/timezone'
+    depends_on:
+      - dev-was9-cts4-sqlserver
+      - dev-was9-cts4-sybase
+      - dev-was9-cts4-ibmmq
+      - dev-was9-cts4-ssn
+    networks:
+      cts4-was9-ntw:
+        aliases:
+          - was9.cts4.wassrv.com
+
+  # dev-was9-cts4-nsserver:
+  #   image: openjdk:8-alpine
+  #   container_name: dev-was9-cts4-nsserver
+  #   hostname: nsserver.com
+  #   environment:
+  #     VERSION_NS: "${VERSION_NS}"
+  #     NS_HOME: '/usr/local/ns-workspace/nshome'
+  #     SETTINGS_NS_SMTP_HOST: "${SETTINGS_NS_SMTP_HOST}"
+  #     SETTINGS_NS_SMTP_PORT: "${SETTINGS_NS_SMTP_PORT}"
+  #     SETTINGS_NS_SMTP_SECURITY_MODE: "${SETTINGS_NS_SMTP_SECURITY_MODE}"
+  #     SETTINGS_NS_SMTP_AUTHENTICATE: "${SETTINGS_NS_SMTP_AUTHENTICATE}"
+  #     SETTINGS_NS_USER: "${SETTINGS_NS_USER}"
+  #     SETTINGS_NS_PASSWORD: "${SETTINGS_NS_PASSWORD}"
+  #   volumes:
+  #     - ./workspace-w9/installer/ns:/usr/local/ns-installer
+  #     - ./workspace-w9/ns-home:/usr/local/ns-workspace/nshome
+  #     - './timezone:/etc/timezone'
+  #   working_dir: /usr/local/ns-installer
+  #   command: 'sh /usr/local/ns-installer/start.sh'
+  #   depends_on:
+  #     - dev-was9-cts4-sybase
+  #   networks:
+  #     cts4-was9-ntw:
+  #       aliases:
+  #         - was9.cts4.nsserver.com
+
+  dev-was9-cts4-ftp:
+    container_name: ien-ftp
+    image: nexussrv.com:18444/atmoz/sftp
+    ports:
+      - "2002:22"
+    command: foo:Passw0rd:1001
+    privileged: true
+    networks:
+      cts4-was9-ntw:
+        aliases:
+          - was9.cts4.sftpsrv.com
+
+networks:
+  cts4-was9-ntw:
