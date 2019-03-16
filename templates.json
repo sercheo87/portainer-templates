@@ -1,0 +1,132 @@
+[
+  {
+    "type": 1,
+    "title": "CWC",
+    "name": "cwc-server",
+    "description": "COBIS Web Container",
+    "logo": "https://cobiscorp.atlassian.net/wiki/download/thumbnails/654639176/logoCWC.png?version=1&modificationDate=1531909523723&cacheVersion=1&api=v2&effects=border-simple%2Cshadow-kn&width=279&height=250",
+    "image": "nexussrv.com:18444/cwc/tomcat:latest",
+    "registry": "nexussrv.com:18444",
+    "ports": [
+      "8080:8080/tcp",
+      "8880:8880/tcp",
+      "8849:8849/tcp"
+    ],
+    "categories": ["infrastructure"],
+    "platform": "linux",
+    "env": [
+      {
+        "name": "CWC_VERSION",
+        "label": "Version product",
+        "description": "Version product example 2.12.6.RELEASE",
+        "default": "2.12.6.RELEASE"
+      },
+      {
+        "name": "CWC_WAR_VERSION",
+        "label": "War version product",
+        "description": "Version product example 2.4.0",
+        "default": "2.4.0"
+      },
+      {
+        "name": "URL_REPOSITORY_INSTALLER",
+        "label": "Url to download installers",
+        "description": "Example http://192.168.83.220:9091",
+        "default": "http://192.168.83.220:9091"
+      },
+      {
+        "name": "TYPE_CWC",
+        "label": "Type CWC",
+        "description": "Type installation",
+        "select": [
+          {
+            "text": "INTRANET",
+            "value": "INTRANET",
+            "default": true
+          },
+          {
+            "text": "INTERNET",
+            "value": "INTERNET"
+          }
+        ]
+      },
+      {
+        "name": "CONFIGURATION_CWC",
+        "label": "Type configuration CWC",
+        "description": "Type configuration on installation",
+        "select": [
+          {
+            "text": "CTSSERVICES",
+            "value": "CTSSERVICES",
+            "default": true
+          },
+          {
+            "text": "MAPPER",
+            "value": "MAPPER"
+          }
+        ]
+      },
+      {
+        "name": "CTS_IP",
+        "label": "IP of CTS",
+        "description": "Example 192.168.83.220",
+        "default": "192.168.83.220"
+      },
+      {
+        "name": "CTS_PORT",
+        "label": "Port of CTS",
+        "description": "Example 9080",
+        "default": "9080"
+      },
+      {
+        "name": "CTS_PROTOCOL",
+        "label": "Protocol of CTS",
+        "description": "Protocol of CTS",
+        "select": [
+          {
+            "text": "http",
+            "value": "http",
+            "default": true
+          },
+          {
+            "text": "https",
+            "value": "https"
+          }
+        ]
+      },
+      {
+        "name": "CTS_SERVER_NAME",
+        "label": "CTS server name",
+        "description": "Example CTSSRV",
+        "default": "CTSSRV"
+      }
+    ],
+    "labels": [
+      { "name": "com.cobiscorp.product", "value": "CWC" }
+    ],
+    "hostname": "cwc.tomcat.com"
+  },
+  {
+    "type": 1,
+    "title": "IEN",
+    "description": "COBIS Integration Engine",
+    "logo": "https://cobiscorp.atlassian.net/wiki/download/thumbnails/654639248/logoIEN.png?version=1&modificationDate=1531908567647&cacheVersion=1&api=v2&effects=border-simple%2Cshadow-kn&width=273&height=250",
+    "image": "nginx:latest",
+    "ports": [
+      "8080:80/tcp",
+      "443/tcp"
+    ]
+  },
+  {
+  "type": 3,
+  "title": "CTS",
+  "description": "COBIS Transaction Server",
+  "note": "Deploys an insecure CockroachDB cluster, please refer to <a href=\"https://www.cockroachlabs.com/docs/stable/orchestrate-cockroachdb-with-docker-swarm.html\" target=\"_blank\">CockroachDB documentation</a> for production deployments.",
+  "categories": ["infrastructure", "database", "queue_manager"],
+  "platform": "linux",
+  "logo": "https://cobiscorp.atlassian.net/wiki/download/thumbnails/205390166/logoCTS.png?version=3&modificationDate=1531908867088&cacheVersion=1&api=v2&effects=border-simple%2Cshadow-kn&width=273&height=250",
+  "repository": {
+    "url": "https://github.com/sercheo87/portainer-templates.git",
+    "stackfile": "stacks/cts-4/docker-cts-stack.yml"
+  }
+}
+]
