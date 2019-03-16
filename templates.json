@@ -111,7 +111,7 @@
     "type": 3,
     "title": "CTS",
     "description": "COBIS Transaction Server",
-    "note": "Deploys an insecure CockroachDB cluster, please refer to <a href=\"https://www.cockroachlabs.com/docs/stable/orchestrate-cockroachdb-with-docker-swarm.html\" target=\"_blank\">CockroachDB documentation</a> for production deployments.",
+    "note": "Deploys an insecure CockroachDB cluster, please refer tooduction deployments.",
     "categories": ["infrastructure", "database", "queue_manager"],
     "platform": "linux",
     "logo": "https://cobiscorp.atlassian.net/wiki/download/thumbnails/205390166/logoCTS.png?version=3&modificationDate=1531908867088&cacheVersion=1&api=v2&effects=border-simple%2Cshadow-kn&width=273&height=250",
