@@ -7,11 +7,7 @@
     "logo": "https://cobiscorp.atlassian.net/wiki/download/thumbnails/654639176/logoCWC.png?version=1&modificationDate=1531909523723&cacheVersion=1&api=v2&effects=border-simple%2Cshadow-kn&width=279&height=250",
     "image": "nexussrv.com:18444/cwc/tomcat:latest",
     "registry": "nexussrv.com:18444",
-    "ports": [
-      "8080:8080/tcp",
-      "8880:8880/tcp",
-      "8849:8849/tcp"
-    ],
+    "ports": ["8080:8080/tcp", "8880:8880/tcp", "8849:8849/tcp"],
     "categories": ["infrastructure"],
     "platform": "linux",
     "env": [
@@ -100,9 +96,7 @@
         "default": "CTSSRV"
       }
     ],
-    "labels": [
-      { "name": "com.cobiscorp.product", "value": "CWC" }
-    ],
+    "labels": [{ "name": "com.cobiscorp.product", "value": "CWC" }],
     "hostname": "cwc.tomcat.com"
   },
   {
@@ -111,22 +105,19 @@
     "description": "COBIS Integration Engine",
     "logo": "https://cobiscorp.atlassian.net/wiki/download/thumbnails/654639248/logoIEN.png?version=1&modificationDate=1531908567647&cacheVersion=1&api=v2&effects=border-simple%2Cshadow-kn&width=273&height=250",
     "image": "nginx:latest",
-    "ports": [
-      "8080:80/tcp",
-      "443/tcp"
-    ]
+    "ports": ["8080:80/tcp", "443/tcp"]
   },
   {
-  "type": 3,
-  "title": "CTS",
-  "description": "COBIS Transaction Server",
-  "note": "Deploys an insecure CockroachDB cluster, please refer to <a href=\"https://www.cockroachlabs.com/docs/stable/orchestrate-cockroachdb-with-docker-swarm.html\" target=\"_blank\">CockroachDB documentation</a> for production deployments.",
-  "categories": ["infrastructure", "database", "queue_manager"],
-  "platform": "linux",
-  "logo": "https://cobiscorp.atlassian.net/wiki/download/thumbnails/205390166/logoCTS.png?version=3&modificationDate=1531908867088&cacheVersion=1&api=v2&effects=border-simple%2Cshadow-kn&width=273&height=250",
-  "repository": {
-    "url": "https://github.com/sercheo87/portainer-templates.git",
-    "stackfile": "stacks/cts-4/docker-cts-stack.yml"
+    "type": 3,
+    "title": "CTS",
+    "description": "COBIS Transaction Server",
+    "note": "Deploys an insecure CockroachDB cluster, please refer to <a href=\"https://www.cockroachlabs.com/docs/stable/orchestrate-cockroachdb-with-docker-swarm.html\" target=\"_blank\">CockroachDB documentation</a> for production deployments.",
+    "categories": ["infrastructure", "database", "queue_manager"],
+    "platform": "linux",
+    "logo": "https://cobiscorp.atlassian.net/wiki/download/thumbnails/205390166/logoCTS.png?version=3&modificationDate=1531908867088&cacheVersion=1&api=v2&effects=border-simple%2Cshadow-kn&width=273&height=250",
+    "repository": {
+      "url": "https://github.com/sercheo87/portainer-templates.git",
+      "stackfile": "stacks/cts-4/docker-cts-stack.yml"
+    }
   }
-}
 ]
