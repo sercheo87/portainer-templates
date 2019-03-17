@@ -1,4 +1,4 @@
-[
+
   {
     "type": 1,
     "title": "CWC",
@@ -125,4 +125,4 @@
       "stackfile": "stacks/cts-4/docker-cts-stack.yml"
     }
   }
-]
+
