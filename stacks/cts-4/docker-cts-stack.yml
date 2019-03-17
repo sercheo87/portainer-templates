@@ -2,127 +2,105 @@ version: '2'
 
 services:
 
-  dev-was9-cts4-ssn:
-    container_name: dev-was9-cts4-ssn
-    image: nexussrv.com:18444/cts/4.2.0/ssnsrv:1.0.0
-    # stdin_open: true
-    # tty: true
+  jboss-cts-activemq:
+    container_name: jboss-cts-activemq
+    hostname: jboss.cts.activemq.com
+    image: nexussrv.com:18444/webcenter/activemq:5.14.3
     ports:
-      - "6005:6005"
-    hostname: ssnsrv
-    networks:
-     cts4-was9-ntw:
-        aliases:
-          - was9.cts4.ssnsrv.com
-
-  dev-was9-cts4-sqlserver:
-    container_name: dev-was9-cts4-sqlserver
-    image: "nexussrv.com:18444/dev/was-9/cts-4/sqlserver:2017"
-    hostname: sqlserversrv
+      - "8161:8161"
+      - "61616:61616"
+      - "61613:61613"
     environment:
-      - "ACCEPT_EULA=Y"
-      - "SA_PASSWORD=mssqlServer1433"
-    ports:
-      - "21433:1433"
+      ACTIVEMQ_CONFIG_NAME: jboss.cts.activemq.com
+      ACTIVEMQ_CONFIG_DEFAULTACCOUNT: 'false'
+      ACTIVEMQ_ADMIN_LOGIN: admin
+      ACTIVEMQ_ADMIN_PASSWORD: Passw0rd
     networks:
-      cts4-was9-ntw:
+      cts-jboss-ntw:
         aliases:
-          - was9.cts4.sqlserversrv.com
+          - jboss.cts.activemq.com
 
-  dev-was9-cts4-sybase:
-    container_name: dev-was9-cts4-sybase
-    image: nexussrv.com:18444/sch-sybase:15.7
+  jboss-cts-sybase:
+    container_name: jboss-cts-sybase
     hostname: dksybase
+    image: nexussrv.com:18444/sch-sybase:15.7
     ports:
-      - "5000:5000"
-    networks:
-      cts4-was9-ntw:
-        aliases:
-          - was9.cts4.sybasesrv.com
-
-  dev-was9-cts4-ibmmq:
-    container_name: dev-was9-cts4-ibmmq
-    image: nexussrv.com:18444/dev/was-9/cts-4/ibmmq:9
-    hostname: ibmmqsrvw8
-    ports:
-      - "1414:1414"
-      - "29443:9443"
+      - "45000:5000"
     environment:
-      LICENSE: accept
-      MQ_QMGR_NAME: QM.BROKER01
+      SYBASE_USER: sa
+      SYBASE_PASSWORD: password
     networks:
-      cts4-was9-ntw:
+      cts-jboss-ntw:
         aliases:
-          - was9.cts4.ibmmqsrv.com
+          - jboss.cts.sybase.com
 
-  dev-was9-cts4-cts-base:
-    container_name: dev-was9-cts4-cts-base
-    image: nexussrv.com:18444/dev/was-9/cts-4/ien-4/cts-base:4
+  jboss-cts-sqlserver:
+    container_name: jboss-cts-sqlserver
+    hostname: jboss.cts.sqlserver.com
+    image: 'nexussrv.com:18444/dev/was-9/cts-4/sqlserver:2017'
+    environment:
+      - 'ACCEPT_EULA=Y'
+      - 'SA_PASSWORD=mssqlServer1433'
     ports:
-      - "9060:9060"
-      - "9080:9080"
-      - "9043:9043"
-      - "9443:9443"
-      - "8880:8880"
-      - "9100:9100"
-    hostname: ctswas8
+      - '41433:1433'
+    networks:
+      cts-jboss-ntw:
+        aliases:
+          - jboss.cts.sqlserver.com
+
+  jboss-cts-ssn:
+    container_name: jboss-cts-ssnsrv
+    hostname: jboss.cts.ssnserver.com
+    image: nexussrv.com:18444/cobis-ssnsrv
+    stdin_open: true
+    tty: true
+    ports:
+      - "46005:6005"
+    networks:
+      cts-jboss-ntw:
+        aliases:
+          - jboss.cts.ssnserver.com
+
+  jboss-cts:
+    container_name: jboss-cts
+    hostname: jboss.cts.com
+    image: nexussrv.com:18444/cwc/tomcat:latest
     mac_address: 02-42-AC-13-00-08
     environment:
-      LANG: C.UTF-8
-      IEN_HOME: /workspace-cobis/ien-home
-      COBIS_HOME: /workspace-cobis/cobishome
-    # volumes:
-    #   - './ibm-was/PASSWORD:/tmp/PASSWORD'
-    #   - './workspace-w9:/workspace-cobis'
-    #   - './was9-logs:/opt/IBM/WebSphere/AppServer/profiles/AppSrv01/logs/server1'
-    #   - './timezone:/etc/timezone'
+      - CTS_VERSION: 4.5.0
+      - IEN_VERSION: 4.6.2
+      - URL_REPOSITORY_INSTALLER: "http://192.168.219.33:9091"
+    ports:
+      - "48080:8080"
+      - "48443:8443"
+      - "49990:9990"
+      - "49993:9993"
     depends_on:
-      - dev-was9-cts4-sqlserver
-      - dev-was9-cts4-sybase
-      - dev-was9-cts4-ibmmq
-      - dev-was9-cts4-ssn
+      - jboss-cts-activemq
+      - jboss-cts-sybase
+      - jboss-cts-sqlserver
+      - jboss-cts-ssn
     networks:
-      cts4-was9-ntw:
+      cts-jboss-ntw:
         aliases:
-          - was9.cts4.wassrv.com
+          - jboss.cts.com
 
-  # dev-was9-cts4-nsserver:
-  #   image: openjdk:8-alpine
-  #   container_name: dev-was9-cts4-nsserver
-  #   hostname: nsserver.com
-  #   environment:
-  #     VERSION_NS: "${VERSION_NS}"
-  #     NS_HOME: '/usr/local/ns-workspace/nshome'
-  #     SETTINGS_NS_SMTP_HOST: "${SETTINGS_NS_SMTP_HOST}"
-  #     SETTINGS_NS_SMTP_PORT: "${SETTINGS_NS_SMTP_PORT}"
-  #     SETTINGS_NS_SMTP_SECURITY_MODE: "${SETTINGS_NS_SMTP_SECURITY_MODE}"
-  #     SETTINGS_NS_SMTP_AUTHENTICATE: "${SETTINGS_NS_SMTP_AUTHENTICATE}"
-  #     SETTINGS_NS_USER: "${SETTINGS_NS_USER}"
-  #     SETTINGS_NS_PASSWORD: "${SETTINGS_NS_PASSWORD}"
-  #   volumes:
-  #     - ./workspace-w9/installer/ns:/usr/local/ns-installer
-  #     - ./workspace-w9/ns-home:/usr/local/ns-workspace/nshome
-  #     - './timezone:/etc/timezone'
-  #   working_dir: /usr/local/ns-installer
-  #   command: 'sh /usr/local/ns-installer/start.sh'
-  #   depends_on:
-  #     - dev-was9-cts4-sybase
-  #   networks:
-  #     cts4-was9-ntw:
-  #       aliases:
-  #         - was9.cts4.nsserver.com
-
-  dev-was9-cts4-ftp:
-    container_name: ien-ftp
+  jboss-cts-ftp:
+    container_name: jboss-cts-ftp
+    hostname: jboss.cts.sftpsrv.com
     image: nexussrv.com:18444/atmoz/sftp
     ports:
-      - "2002:22"
+        - "4222:22"
     command: foo:Passw0rd:1001
     privileged: true
+    volumes:
+      - ./sftp/upload:/home/foo/upload
+      - ./sftp/Automoviles:/home/foo/Automoviles
+      - ./sftp/GenerateCar:/home/foo/GenerateCar
     networks:
-      cts4-was9-ntw:
+     cts-jboss-ntw:
         aliases:
-          - was9.cts4.sftpsrv.com
+          - jboss.cts.sftpsrv.com
 
 networks:
-  cts4-was9-ntw:
+  cts-jboss-ntw:
