@@ -7,9 +7,9 @@ services:
     hostname: jboss.cts.activemq.com
     image: nexussrv.com:18444/webcenter/activemq:5.14.3
     ports:
-      - "8161:8161"
-      - "61616:61616"
-      - "61613:61613"
+      - "58161:8161"
+      - "51616:61616"
+      - "51613:61613"
     environment:
       ACTIVEMQ_CONFIG_NAME: jboss.cts.activemq.com
       ACTIVEMQ_CONFIG_DEFAULTACCOUNT: 'false'
@@ -25,7 +25,7 @@ services:
     hostname: dksybase
     image: nexussrv.com:18444/sch-sybase:15.7
     ports:
-      - "45000:5000"
+      - "55000:5000"
     environment:
       SYBASE_USER: sa
       SYBASE_PASSWORD: password
@@ -42,7 +42,7 @@ services:
       - 'ACCEPT_EULA=Y'
       - 'SA_PASSWORD=mssqlServer1433'
     ports:
-      - '41433:1433'
+      - '51433:1433'
     networks:
       ien-jboss-ntw:
         aliases:
@@ -55,7 +55,7 @@ services:
     stdin_open: true
     tty: true
     ports:
-      - "46005:6005"
+      - "56005:6005"
     networks:
       ien-jboss-ntw:
         aliases:
@@ -71,10 +71,10 @@ services:
       IEN_VERSION: 4.6.2
       URL_REPOSITORY_INSTALLER: "http://192.168.219.33:9091"
     ports:
-      - "48080:8080"
-      - "48443:8443"
-      - "49990:9990"
-      - "49993:9993"
+      - "58080:8080"
+      - "58443:8443"
+      - "59990:9990"
+      - "59993:9993"
     depends_on:
       - jboss-ien-activemq
       - jboss-ien-sybase
@@ -90,7 +90,7 @@ services:
     hostname: jboss.cts.sftpsrv.com
     image: nexussrv.com:18444/atmoz/sftp
     ports:
-        - "4222:22"
+        - "5222:22"
     command: foo:Passw0rd:1001
     privileged: true
     volumes:
