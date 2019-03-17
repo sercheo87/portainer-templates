@@ -64,7 +64,7 @@ services:
   jboss-ien:
     container_name: jboss-ien
     hostname: jboss.cts.com
-    image: nexussrv.com:18444/cwc/tomcat:latest
+    image: nexussrv.com:18444/cts/jboss:eap7
     mac_address: 02-42-AC-13-00-08
     environment:
       CTS_VERSION: 4.5.0
