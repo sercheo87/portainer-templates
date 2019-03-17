@@ -67,9 +67,9 @@ services:
     image: nexussrv.com:18444/cwc/tomcat:latest
     mac_address: 02-42-AC-13-00-08
     environment:
-      - CTS_VERSION: 4.5.0
-      - IEN_VERSION: 4.6.2
-      - URL_REPOSITORY_INSTALLER: "http://192.168.219.33:9091"
+      CTS_VERSION: 4.5.0
+      IEN_VERSION: 4.6.2
+      URL_REPOSITORY_INSTALLER: "http://192.168.219.33:9091"
     ports:
       - "48080:8080"
       - "48443:8443"
