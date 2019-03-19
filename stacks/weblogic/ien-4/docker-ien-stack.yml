@@ -1,0 +1,127 @@
+version: '2'
+
+services:
+
+  weblogic-ien-activemq:
+    container_name: weblogic-ien-activemq
+    hostname: weblogic.cts.activemq.com
+    image: nexussrv.com:18444/webcenter/activemq:5.14.3
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+      - "61613:61613"
+    environment:
+      ACTIVEMQ_CONFIG_NAME: weblogic.cts.activemq.com
+      ACTIVEMQ_CONFIG_DEFAULTACCOUNT: 'false'
+      ACTIVEMQ_ADMIN_LOGIN: admin
+      ACTIVEMQ_ADMIN_PASSWORD: Passw0rd
+    networks:
+      cts-weblogic-ntw:
+        aliases:
+          - weblogic.cts.activemq.com
+
+  weblogic-ien-sybase:
+    container_name: weblogic-ien-sybase
+    hostname: dksybase
+    image: nexussrv.com:18444/sch-sybase:15.7
+    ports:
+      - "25000:5000"
+    environment:
+      SYBASE_USER: sa
+      SYBASE_PASSWORD: password
+    networks:
+      cts-weblogic-ntw:
+        aliases:
+          - weblogic.cts.sybase.com
+
+  weblogic-ien-sqlserver:
+    container_name: weblogic-ien-sqlserver
+    hostname: weblogic.cts.sqlserver.com
+    image: 'nexussrv.com:18444/dev/was-9/cts-4/sqlserver:2017'
+    environment:
+      - 'ACCEPT_EULA=Y'
+      - 'SA_PASSWORD=mssqlServer1433'
+    ports:
+      - '21433:1433'
+    networks:
+      cts-weblogic-ntw:
+        aliases:
+          - weblogic.cts.sqlserver.com
+
+  weblogic-ien-ssn:
+    container_name: weblogic-ien-ssnsrv
+    hostname: weblogic.cts.ssnserver.com
+    image: nexussrv.com:18444/cobis-ssnsrv
+    stdin_open: true
+    tty: true
+    ports:
+      - "26005:6005"
+    networks:
+      cts-weblogic-ntw:
+        aliases:
+          - weblogic.cts.ssnserver.com
+
+  wlsadmin:
+    hostname: wlsadmin
+    container_name: wlsadmin
+    image: nexussrv.com:18444/cts/weblogic:12213-domain
+    mac_address: 02-42-AC-13-00-08
+    environment:
+      CTS_VERSION: 4.5.0
+      IEN_VERSION: 4.6.2
+      URL_REPOSITORY_INSTALLER: "http://192.168.83.220:9091"
+      ADMIN_PASSWORD: passw0rd
+      LANG: C.UTF-8
+      COBIS_HOME: /u01/oracle/workspace-cobis/cobis_home
+      WL_HOME: /u01/oracle
+      LANG: en_US.UTF-8
+      LANGUAGE: 'en_US:en'
+      LC_ALL: 'en_US.UTF-8'
+      DOMAIN_NAME: base_domain
+      ADMIN_PORT: '7001'
+      ADMIN_HOST: wlsadmin
+      CLUSTER_NAME: DockerCluster
+      PRODUCTION_MODE: dev
+      ADMIN_USERNAME: weblogic
+      ADMIN_NAME: AdminServer
+      MS_PORT: '8001'
+      DEBUG_FLAG: 'false'
+      NM_PORT: '5556'
+      MS_NAME: 'cobisServer'
+      NM_NAME: 'cobisMachine'
+      ADMIN_PASSWORD: passw0rd
+    command: ['/u01/oracle/workspace-cobis/cts-installer/run.sh']
+    ports:
+      - "7001:7001"
+      - "7002:7002"
+      - "8001:8001"
+      - "8002:8002"
+    depends_on:
+      - weblogic-ien-activemq
+      - weblogic-ien-sybase
+      - weblogic-ien-sqlserver
+      - weblogic-ien-ssn
+    networks:
+      cts-weblogic-ntw:
+        aliases:
+          - wlsadmin
+
+  weblogic-ien-ftp:
+    container_name: weblogic-ien-ftp
+    hostname: weblogic.cts.sftpsrv.com
+    image: nexussrv.com:18444/atmoz/sftp
+    ports:
+        - "2222:22"
+    command: foo:Passw0rd:1001
+    privileged: true
+    volumes:
+      - ./sftp/upload:/home/foo/upload
+      - ./sftp/Automoviles:/home/foo/Automoviles
+      - ./sftp/GenerateCar:/home/foo/GenerateCar
+    networks:
+     cts-weblogic-ntw:
+        aliases:
+          - weblogic.cts.sftpsrv.com
+
+networks:
+  cts-weblogic-ntw:
