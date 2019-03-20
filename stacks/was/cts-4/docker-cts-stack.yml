@@ -1,0 +1,109 @@
+version: '2'
+
+services:
+
+  was-cts-ibmmq:
+    container_name: was-cts-ibmmq
+    hostname: was.cts.ibmmq.com
+    image: nexussrv.com:18444/cobis-mq:9
+    ports:
+      - "1414:1414"
+      - "29443:9443"
+    environment:
+      LICENSE: accept
+      MQ_QMGR_NAME: QM.BROKER01
+    networks:
+      cts-was-ntw:
+        aliases:
+          - was.cts.ibmmq.com
+
+  was-cts-sybase:
+    container_name: was-cts-sybase
+    hostname: dksybase
+    image: nexussrv.com:18444/sch-sybase:15.7
+    ports:
+      - "45000:5000"
+    environment:
+      SYBASE_USER: sa
+      SYBASE_PASSWORD: password
+    networks:
+      cts-was-ntw:
+        aliases:
+          - was.cts.sybase.com
+
+  was-cts-sqlserver:
+    container_name: was-cts-sqlserver
+    hostname: was.cts.sqlserver.com
+    image: 'nexussrv.com:18444/dev/was-9/cts-4/sqlserver:2017'
+    environment:
+      - 'ACCEPT_EULA=Y'
+      - 'SA_PASSWORD=mssqlServer1433'
+    ports:
+      - '41433:1433'
+    networks:
+      cts-was-ntw:
+        aliases:
+          - was.cts.sqlserver.com
+
+  was-cts-ssn:
+    container_name: was-cts-ssnsrv
+    hostname: was.cts.ssnserver.com
+    image: nexussrv.com:18444/cobis-ssnsrv
+    stdin_open: true
+    tty: true
+    ports:
+      - "46005:6005"
+    networks:
+      cts-was-ntw:
+        aliases:
+          - was.cts.ssnserver.com
+
+  was-cts:
+    container_name: was-cts
+    hostname: was.cts.com
+    mac_address: 02-42-AC-13-00-08
+    image: nexussrv.com:18444/cts/was:9.0.0.7
+    environment:
+      CTS_VERSION: 4.5.0
+      IEN_VERSION: 4.6.2
+      URL_REPOSITORY_INSTALLER: "http://192.168.83.220:9091"
+      PROFILE_NAME: AppSrv01
+      CELL_NAME: DefaultCell01
+      NODE_NAME: DefaultNode01
+      COBIS_HOME: '/workspace-cobis/cobishome'
+      IEN_HOME: '/workspace-cobis/ienhome'
+      LANG: 'C.UTF-8'
+    ports:
+      - "9060:9060"
+      - "9080:9080"
+      - "9043:9043"
+      - "9443:9443"
+    depends_on:
+      - was-cts-ibmmq
+      - was-cts-sybase
+      - was-cts-sqlserver
+      - was-cts-ssn
+    networks:
+      cts-was-ntw:
+        aliases:
+          - was.cts.com
+
+  was-cts-ftp:
+    container_name: was-cts-ftp
+    hostname: was.cts.sftpsrv.com
+    image: nexussrv.com:18444/atmoz/sftp
+    ports:
+        - "4222:22"
+    command: foo:Passw0rd:1001
+    privileged: true
+    volumes:
+      - ./sftp/upload:/home/foo/upload
+      - ./sftp/Automoviles:/home/foo/Automoviles
+      - ./sftp/GenerateCar:/home/foo/GenerateCar
+    networks:
+     cts-was-ntw:
+        aliases:
+          - was.cts.sftpsrv.com
+
+networks:
+  cts-was-ntw:
