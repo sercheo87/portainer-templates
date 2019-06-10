@@ -62,7 +62,7 @@ services:
     container_name: was-cts
     hostname: was.cts.com
     mac_address: 02-42-AC-13-00-08
-    image: nexussrv.com:18444/cts/was:9.0.0.7
+    image: nexussrv.com:18444/cts/was:9.0.0.11
     environment:
       CTS_VERSION: 4.5.0
       IEN_VERSION: 4.6.2
@@ -73,6 +73,7 @@ services:
       COBIS_HOME: '/workspace-cobis/cobishome'
       IEN_HOME: '/workspace-cobis/ienhome'
       LANG: 'C.UTF-8'
+      ENABLE_BASIC_LOGGING: 'true'
     ports:
       - "9060:9060"
       - "9080:9080"
