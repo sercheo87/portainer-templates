@@ -5,7 +5,7 @@ services:
   was-cts-ibmmq:
     container_name: was-cts-ibmmq
     hostname: was.cts.ibmmq.com
-    image: nexussrv.com:18444/cobis-mq:9
+    image: nexussrv.com:18444/cobis/ibmcom/mq:9.1.2.0
     ports:
       - "1414:1414"
       - "29443:9443"
