@@ -64,7 +64,7 @@ services:
     mac_address: 02-42-AC-13-00-08
     image: nexussrv.com:18444/cts/was:9.0.0.11
     environment:
-      CTS_VERSION: 4.5.0
+      CTS_VERSION: 4.6.0
       IEN_VERSION: 4.6.2
       URL_REPOSITORY_INSTALLER: "http://192.168.83.220:9091"
       PROFILE_NAME: AppSrv01
